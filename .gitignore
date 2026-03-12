@@ -1,0 +1,38 @@
+### ОС и редакторы
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+### Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+develop-eggs/
+eggs/
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+### Виртуальное окружение
+venv/
+.venv/
+env/
+.env/
+
+### Логи и временные файлы
+*.log
+*.tmp
+*.bak
+
+### Инструменты IDE/AI
+.cursor/
+
