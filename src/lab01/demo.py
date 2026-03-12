@@ -4,7 +4,7 @@ from model import Book, BookState, BookValidationError
 
 
 def scenario_creation_and_output() -> None:
-    print("=== Сценарий 1: корректное создание и вывод ===")
+    print("Сценарий 1: корректное создание и вывод")
     book = Book(
         title="Война и мир",
         author="Лев Толстой",
@@ -19,7 +19,7 @@ def scenario_creation_and_output() -> None:
 
 
 def scenario_equality() -> None:
-    print("=== Сценарий 2: сравнение объектов ===")
+    print("Сценарий 2: сравнение объектов")
     first = Book(
         title="Преступление и наказание",
         author="Фёдор Достоевский",
@@ -51,7 +51,7 @@ def scenario_equality() -> None:
 
 
 def scenario_invalid_creation() -> None:
-    print("=== Сценарий 3: ошибочная инициализация ===")
+    print("Сценарий 3: ошибочная инициализация")
     invalid_cases = [
         dict(
             title="",
@@ -97,7 +97,7 @@ def scenario_invalid_creation() -> None:
 
 
 def scenario_price_setter() -> None:
-    print("=== Сценарий 4: setter и ограничения ===")
+    print("Сценарий 4: setter и ограничения")
     book = Book(
         title="Мастер и Маргарита",
         author="Михаил Булгаков",
@@ -119,7 +119,7 @@ def scenario_price_setter() -> None:
 
 
 def scenario_class_attributes() -> None:
-    print("=== Сценарий 5: атрибуты класса ===")
+    print("Сценарий 5: атрибуты класса")
     print(f"Допустимые состояния книги (через класс): {Book.ALLOWED_STATES}")
     book = Book(
         title="Анна Каренина",
@@ -136,9 +136,8 @@ def scenario_class_attributes() -> None:
 
 
 def scenario_states_and_transitions() -> None:
-    print("=== Сценарий 6: логические состояния и поведение ===")
+    print("Сценарий 6: логические состояния и поведение")
 
-    # Нормальный сценарий: available -> checked_out -> available
     print("--- Нормальный сценарий ---")
     normal = Book(
         title="Нормальный сценарий",
@@ -155,7 +154,6 @@ def scenario_states_and_transitions() -> None:
     print(f"После return_book: state={normal.state}")
     print()
 
-    # Нарушение ограничения: повторный checkout
     print("--- Сценарий с нарушением ограничения ---")
     invalid_checkout = Book(
         title="Повторная выдача",
@@ -174,7 +172,6 @@ def scenario_states_and_transitions() -> None:
         print(f"Ожидаемая ошибка: {error}")
     print()
 
-    # Сценарий со сменой состояния на утерянную
     print("--- Сценарий с утерянной книгой ---")
     lost_book = Book(
         title="Утерянная книга",

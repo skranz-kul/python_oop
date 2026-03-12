@@ -1,31 +1,29 @@
 from __future__ import annotations
 
-from typing import Final
-
 
 class BookValidationError(ValueError):
     """Исключение для ошибок валидации данных книги"""
 
 
 class BookState:
-    AVAILABLE: Final[str] = "available"
-    CHECKED_OUT: Final[str] = "checked_out"
-    LOST: Final[str] = "lost"
+    AVAILABLE: str = "available"
+    CHECKED_OUT: str = "checked_out"
+    LOST: str = "lost"
 
 
 class Book:
     """Модель книги в библиотеке с логическими состояниями и валидацией"""
 
-    ALLOWED_STATES: Final[tuple[str, ...]] = (
+    ALLOWED_STATES: tuple[str, ...] = (
         BookState.AVAILABLE,
         BookState.CHECKED_OUT,
         BookState.LOST,
     )
 
-    MIN_YEAR: Final[int] = 1450
-    MAX_YEAR: Final[int] = 2100
-    MIN_PRICE: Final[float] = 0.0
-    MIN_PAGES: Final[int] = 1
+    MIN_YEAR: int = 1450
+    MAX_YEAR: int = 2026
+    MIN_PRICE: float = 0.0
+    MIN_PAGES: int = 1
 
     def __init__(
         self,
@@ -107,7 +105,7 @@ class Book:
         """Выдать книгу читателю"""
         if self._state != BookState.AVAILABLE:
             raise BookValidationError(
-                f"Нельзя выдать книгу в состоянии {self._state!r}. "
+                f"Нельзя выдать книгу в состоянии {self._state!r}"
                 f"Допустимо только из состояния {BookState.AVAILABLE!r}."
             )
         self._state = BookState.CHECKED_OUT
@@ -116,8 +114,8 @@ class Book:
         """Вернуть книгу в фонд библиотеки"""
         if self._state != BookState.CHECKED_OUT:
             raise BookValidationError(
-                f"Нельзя вернуть книгу в состоянии {self._state!r}. "
-                f"Допустимо только из состояния {BookState.CHECKED_OUT!r}."
+                f"Нельзя вернуть книгу в состоянии {self._state!r}"
+                f"Допустимо только из состояния {BookState.CHECKED_OUT!r}"
             )
         self._state = BookState.AVAILABLE
 
