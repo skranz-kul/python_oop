@@ -1,5 +1,26 @@
 from __future__ import annotations
 
+try:
+    from .validate import (
+        validate_author,
+        validate_inventory_id,
+        validate_pages,
+        validate_price,
+        validate_state,
+        validate_title,
+        validate_year,
+    )
+except ImportError:
+    from validate import (
+        validate_author,
+        validate_inventory_id,
+        validate_pages,
+        validate_price,
+        validate_state,
+        validate_title,
+        validate_year,
+    )
+
 
 class BookValidationError(ValueError):
     """Исключение для ошибок валидации данных книги"""
@@ -35,13 +56,18 @@ class Book:
         inventory_id: str,
         state: str = BookState.AVAILABLE,
     ) -> None:
-        self._title: str = self._validate_title(title)
-        self._author: str = self._validate_author(author)
-        self._year: int = self._validate_year(year)
-        self._pages: int = self._validate_pages(pages)
-        self._price: float = self._validate_price(price)
-        self._inventory_id: str = self._validate_inventory_id(inventory_id)
-        self._state: str = self._validate_state(state)
+        self._title: str = validate_title(title, BookValidationError)
+        self._author: str = validate_author(author, BookValidationError)
+        self._year: int = validate_year(
+            year,
+            self.MIN_YEAR,
+            self.MAX_YEAR,
+            BookValidationError,
+        )
+        self._pages: int = validate_pages(pages, self.MIN_PAGES, BookValidationError)
+        self._price: float = validate_price(price, self.MIN_PRICE, BookValidationError)
+        self._inventory_id: str = validate_inventory_id(inventory_id, BookValidationError)
+        self._state: str = validate_state(state, self.ALLOWED_STATES, BookValidationError)
 
     @property
     def title(self) -> str:
@@ -65,7 +91,7 @@ class Book:
 
     @price.setter
     def price(self, value: float) -> None:
-        self._price = self._validate_price(value)
+        self._price = validate_price(value, self.MIN_PRICE, BookValidationError)
 
     @property
     def inventory_id(self) -> str:
@@ -126,70 +152,3 @@ class Book:
                 f"Нельзя пометить книгу как утерянную из состояния {self._state!r}."
             )
         self._state = BookState.LOST
-
-    
-    def _validate_title(self, value: str) -> str:
-        if not isinstance(value, str):
-            raise BookValidationError("Название книги должно быть строкой.")
-        cleaned = value.strip()
-        if not cleaned:
-            raise BookValidationError("Название книги не может быть пустым.")
-        return cleaned
-
-    def _validate_author(self, value: str) -> str:
-        if not isinstance(value, str):
-            raise BookValidationError("Автор должен быть строкой.")
-        cleaned = value.strip()
-        if not cleaned:
-            raise BookValidationError("Имя автора не может быть пустым.")
-        return cleaned
-
-    def _validate_year(self, value: int) -> int:
-        if not isinstance(value, int):
-            raise BookValidationError("Год издания должен быть целым числом.")
-        if not (self.MIN_YEAR <= value <= self.MAX_YEAR):
-            raise BookValidationError(
-                f"Год издания должен быть в диапазоне "
-                f"[{self.MIN_YEAR}, {self.MAX_YEAR}]."
-            )
-        return value
-
-    def _validate_pages(self, value: int) -> int:
-        if not isinstance(value, int):
-            raise BookValidationError("Количество страниц должно быть целым числом.")
-        if value < self.MIN_PAGES:
-            raise BookValidationError(
-                f"Количество страниц должно быть не меньше {self.MIN_PAGES}."
-            )
-        return value
-
-    def _validate_price(self, value: float) -> float:
-        if not isinstance(value, (int, float)):
-            raise BookValidationError("Цена должна быть числом.")
-        price = float(value)
-        if price < self.MIN_PRICE:
-            raise BookValidationError(
-                f"Цена не может быть меньше {self.MIN_PRICE:.2f}."
-            )
-        return round(price, 2)
-
-    def _validate_state(self, value: str) -> str:
-        if not isinstance(value, str):
-            raise BookValidationError("Состояние должно быть строкой.")
-        if value not in self.ALLOWED_STATES:
-            allowed = ", ".join(self.ALLOWED_STATES)
-            raise BookValidationError(
-                f"Недопустимое состояние {value!r}. "
-                f"Разрешённые значения: {allowed}."
-            )
-        return value
-
-    def _validate_inventory_id(self, value: str) -> str:
-        if not isinstance(value, str):
-            raise BookValidationError("Инвентарный номер должен быть строкой.")
-        cleaned = value.strip()
-        if not cleaned:
-            raise BookValidationError("Инвентарный номер не может быть пустым.")
-        return cleaned
-
-
