@@ -32,7 +32,3 @@ env/
 *.log
 *.tmp
 *.bak
-
-### Инструменты IDE/AI
-.cursor/
-
