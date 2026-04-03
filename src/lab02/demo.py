@@ -11,9 +11,9 @@ from collection import DuplicateBookError, Library, LibraryTypeError
 logger = logging.getLogger(__name__)
 
 
-def _print_library(label: str, library: Library) -> None:
+def _print_library(label: str, collection: Library) -> None:
     print(label)
-    for book in library:
+    for book in collection:
         print(f"  {book}")
     print()
 
@@ -24,8 +24,8 @@ def scenario_basic_crud() -> None:
     print("Сценарий 1: базовые операции (add / get_all / remove)")
     print("=" * 60)
 
-    library = Library()
-    b1 = Book(
+    catalog = Library()
+    war_and_peace = Book(
         title="Война и мир",
         author="Лев Толстой",
         year=1873,
@@ -33,7 +33,7 @@ def scenario_basic_crud() -> None:
         price=1500.0,
         inventory_id="INV-L02-001",
     )
-    b2 = Book(
+    crime_and_punishment = Book(
         title="Преступление и наказание",
         author="Фёдор Достоевский",
         year=1866,
@@ -41,16 +41,16 @@ def scenario_basic_crud() -> None:
         price=900.0,
         inventory_id="INV-L02-002",
     )
-    library.add(b1)
-    library.add(b2)
-    _print_library("После добавления двух книг:", library)
+    catalog.add(war_and_peace)
+    catalog.add(crime_and_punishment)
+    _print_library("После добавления двух книг:", catalog)
 
-    library.remove(b1)
+    catalog.remove(war_and_peace)
     print("Удалена первая книга (Война и мир).")
-    _print_library("Коллекция после удаления:", library)
+    _print_library("Коллекция после удаления:", catalog)
 
     print("Содержимое через get_all():")
-    for book in library.get_all():
+    for book in catalog.get_all():
         print(f"  {book.title} — {book.inventory_id}")
     print()
 
@@ -61,8 +61,8 @@ def scenario_search_len_iter_duplicates() -> None:
     print("Сценарий 2: поиск, len(), итерация, запрет дубликатов")
     print("=" * 60)
 
-    library = Library()
-    books = [
+    catalog = Library()
+    margarita_editions = [
         Book(
             title="Мастер и Маргарита",
             author="Михаил Булгаков",
@@ -80,17 +80,17 @@ def scenario_search_len_iter_duplicates() -> None:
             inventory_id="INV-L02-011",
         ),
     ]
-    for book in books:
-        library.add(book)
+    for book in margarita_editions:
+        catalog.add(book)
 
-    print(f"len(library) = {len(library)}")
-    found = library.find_by_title("Мастер и Маргарита")
-    print(f"find_by_title('Мастер и Маргарита'): {len(found)} книг(и)")
-    by_id = library.find_by_inventory_id("INV-L02-010")
-    print(f"find_by_inventory_id('INV-L02-010'): {by_id.title if by_id else None}")
+    print(f"len(catalog) = {len(catalog)}")
+    same_title = catalog.find_by_title("Мастер и Маргарита")
+    print(f"find_by_title('Мастер и Маргарита'): {len(same_title)} книг(и)")
+    lookup_inv = catalog.find_by_inventory_id("INV-L02-010")
+    print(f"find_by_inventory_id('INV-L02-010'): {lookup_inv.title if lookup_inv else None}")
     print()
 
-    duplicate = Book(
+    inv_id_collision = Book(
         title="Другая книга",
         author="Другой автор",
         year=2000,
@@ -99,13 +99,13 @@ def scenario_search_len_iter_duplicates() -> None:
         inventory_id="INV-L02-010",
     )
     try:
-        library.add(duplicate)
+        catalog.add(inv_id_collision)
     except DuplicateBookError as exc:
         logger.warning("Отклонено добавление дубликата: %s", exc)
     print()
 
     try:
-        library.add("not a book")  # type: ignore[arg-type]
+        catalog.add("not a book")  # type: ignore[arg-type]
     except LibraryTypeError as exc:
         logger.warning("Отклонён неверный тип: %s", exc)
     print()
@@ -117,8 +117,8 @@ def scenario_index_sort_filter() -> None:
     print("Сценарий 3: индексация, сортировка, фильтрация")
     print("=" * 60)
 
-    library = Library()
-    a = Book(
+    catalog = Library()
+    anna_karenina = Book(
         title="Анна Каренина",
         author="Лев Толстой",
         year=1877,
@@ -126,7 +126,7 @@ def scenario_index_sort_filter() -> None:
         price=1200.0,
         inventory_id="INV-L02-020",
     )
-    b = Book(
+    evgeny_onegin = Book(
         title="Евгений Онегин",
         author="Александр Пушкин",
         year=1833,
@@ -134,7 +134,7 @@ def scenario_index_sort_filter() -> None:
         price=400.0,
         inventory_id="INV-L02-021",
     )
-    c = Book(
+    oblomov = Book(
         title="Обломов",
         author="Иван Гончаров",
         year=1859,
@@ -142,48 +142,48 @@ def scenario_index_sort_filter() -> None:
         price=950.0,
         inventory_id="INV-L02-022",
     )
-    for book in (a, b, c):
-        library.add(book)
+    for book in (anna_karenina, evgeny_onegin, oblomov):
+        catalog.add(book)
 
-    print(f"library[0] = {library[0].title}")
-    print(f"library[2] = {library[2].title}")
+    print(f"catalog[0] = {catalog[0].title}")
+    print(f"catalog[2] = {catalog[2].title}")
 
-    anna = library.find_by_inventory_id("INV-L02-020")
-    if anna is not None:
-        anna.checkout()
+    anna_book = catalog.find_by_inventory_id("INV-L02-020")
+    if anna_book is not None:
+        anna_book.checkout()
         print("Книга «Анна Каренина» выдана (checkout).")
     print()
 
-    available = library.get_available()
-    checked_out = library.get_checked_out()
+    on_shelf = catalog.get_available()
+    on_loan = catalog.get_checked_out()
     print("До remove_at: доступные и выданные (новые коллекции):")
-    print(f"  get_available(): {len(available)} книг(и)")
-    print(f"  get_checked_out(): {len(checked_out)} книг(и)")
-    _print_library("  Выданные:", checked_out)
+    print(f"  get_available(): {len(on_shelf)} книг(и)")
+    print(f"  get_checked_out(): {len(on_loan)} книг(и)")
+    _print_library("  Выданные:", on_loan)
     print()
 
-    removed = library.remove_at(1)
-    print(f"remove_at(1) удалил: {removed.title}")
-    _print_library("После remove_at:", library)
+    popped = catalog.remove_at(1)
+    print(f"remove_at(1) удалил: {popped.title}")
+    _print_library("После remove_at:", catalog)
 
-    library.sort_by_price()
-    _print_library("После sort_by_price() (по возрастанию):", library)
+    catalog.sort_by_price()
+    _print_library("После sort_by_price() (по возрастанию):", catalog)
 
-    library.sort_by_year(reverse=True)
-    _print_library("После sort_by_year(reverse=True):", library)
+    catalog.sort_by_year(reverse=True)
+    _print_library("После sort_by_year(reverse=True):", catalog)
 
-    available = library.get_available()
-    checked_out = library.get_checked_out()
-    expensive = library.get_expensive(800.0)
+    on_shelf = catalog.get_available()
+    on_loan = catalog.get_checked_out()
+    pricey = catalog.get_expensive(800.0)
 
     print("Фильтры возвращают новые объекты Library; исходная коллекция не заменяется:")
-    print(f"  len(library) = {len(library)}")
-    print(f"  get_available(): {len(available)} книг(и)")
-    _print_library("  Доступные:", available)
-    print(f"  get_checked_out(): {len(checked_out)} книг(и)")
-    _print_library("  Выданные:", checked_out)
-    print(f"  get_expensive(800): {len(expensive)} книг(и)")
-    _print_library("  Дороже 800:", expensive)
+    print(f"  len(catalog) = {len(catalog)}")
+    print(f"  get_available(): {len(on_shelf)} книг(и)")
+    _print_library("  Доступные:", on_shelf)
+    print(f"  get_checked_out(): {len(on_loan)} книг(и)")
+    _print_library("  Выданные:", on_loan)
+    print(f"  get_expensive(800): {len(pricey)} книг(и)")
+    _print_library("  Дороже 800:", pricey)
     print()
 
 

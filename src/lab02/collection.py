@@ -23,11 +23,11 @@ class DuplicateBookError(LibraryError):
 
 
 class BookNotFoundError(LibraryError):
-    """Указанная книга отсутствует в коллекции."""
+    """указанная книга отсутствует в коллекции"""
 
 
 class Library:
-    """Коллекция книг библиотеки: хранение, поиск, сортировка, фильтрация."""
+    """Коллекция книг библиотеки: хранение, поиск, сортировка, фильтрация"""
 
     def __init__(self) -> None:
         self._items: list[Book] = []
@@ -35,23 +35,23 @@ class Library:
     def add(self, item: Book) -> None:
         if not isinstance(item, Book):
             raise LibraryTypeError(
-                f"В коллекцию можно добавлять только объекты Book, получено: {type(item).__name__!r}."
+                f"В коллекцию можно добавлять только объекты Book, получено: {type(item).__name__}."
             )
-        if any(existing.inventory_id == item.inventory_id for existing in self._items):
+        if any(stored.inventory_id == item.inventory_id for stored in self._items):
             raise DuplicateBookError(
-                f"Книга с инвентарным номером {item.inventory_id!r} уже есть в коллекции."
+                f"Книга с номером {item.inventory_id} уже есть в коллекции"
             )
         self._items.append(item)
 
     def remove(self, item: Book) -> None:
         if not isinstance(item, Book):
             raise LibraryTypeError(
-                f"Удалять можно только объекты Book, получено: {type(item).__name__!r}."
+                f"Удалять можно только объекты Book, получено: {type(item).__name__}."
             )
         try:
             self._items.remove(item)
         except ValueError as exc:
-            raise BookNotFoundError("Указанная книга отсутствует в коллекции.") from exc
+            raise BookNotFoundError("Указанная книга отсутствует в коллекции") from exc
 
     def get_all(self) -> list[Book]:
         return list(self._items)
@@ -81,13 +81,13 @@ class Library:
         self._items.sort(key=key, reverse=reverse)
 
     def sort_by_title(self, reverse: bool = False) -> None:
-        self.sort(key=lambda b: b.title, reverse=reverse)
+        self.sort(key=lambda book: book.title, reverse=reverse)
 
     def sort_by_price(self, reverse: bool = False) -> None:
-        self.sort(key=lambda b: b.price, reverse=reverse)
+        self.sort(key=lambda book: book.price, reverse=reverse)
 
     def sort_by_year(self, reverse: bool = False) -> None:
-        self.sort(key=lambda b: b.year, reverse=reverse)
+        self.sort(key=lambda book: book.year, reverse=reverse)
 
     def _new_with(self, books: Iterable[Book]) -> Library:
         library = Library()
