@@ -1,23 +1,15 @@
 from __future__ import annotations
 
-try:
-    from ..lib.book_validators import (
-        validate_float_min,
-        validate_int_min,
-        validate_non_empty_string,
-    )
-    from .base import Book, BookValidationError
-except ImportError:
-    from lib.book_validators import (  # type: ignore[no-redef]
-        validate_float_min,
-        validate_int_min,
-        validate_non_empty_string,
-    )
-    from lab03.base import Book, BookValidationError  # type: ignore[no-redef]
+from src.lib.book_validators import (
+    validate_float_min,
+    validate_int_min,
+    validate_non_empty_string,
+)
+from src.lab03.base import Book, BookValidationError
 
 
 class PrintedBook(Book):
-    """Печатная книга."""
+    """печатная книга"""
 
     ALLOWED_COVER_TYPES: tuple[str, ...] = ("soft", "hard")
 
@@ -60,7 +52,7 @@ class PrintedBook(Book):
         return normalized
 
     def calculate_access_fee(self) -> float:
-        """Печатная книга дороже в обработке (выдача + износ)."""
+        """печатная книга дороже в обработке (выдача + износ)"""
         return round(self.price + 80.0, 2)
 
     def estimate_restoration_cost(self) -> float:
@@ -74,7 +66,7 @@ class PrintedBook(Book):
 
 
 class Ebook(Book):
-    """Электронная книга."""
+    """электронная книга"""
 
     def __init__(
         self,
@@ -113,7 +105,7 @@ class Ebook(Book):
         return f"https://library.local/download/{self.inventory_id}.{self.file_format}"
 
     def calculate_access_fee(self) -> float:
-        """Для Ebook стоимость доступа меньше физического экземпляра."""
+        """для ebook стоимость доступа меньше физического экземпляра"""
         return round(self.price * 0.35, 2)
 
     def __str__(self) -> str:
@@ -124,7 +116,7 @@ class Ebook(Book):
 
 
 class AudioBook(Book):
-    """Аудиокнига."""
+    """аудиокнига"""
 
     def __init__(
         self,
@@ -163,7 +155,7 @@ class AudioBook(Book):
         return min(120, self.duration_minutes * 60 // 10)
 
     def calculate_access_fee(self) -> float:
-        """Учитываем базовую цену и длину аудио."""
+        """учитываем базовую цену и длину аудио"""
         return round(self.price * 0.5 + self.duration_minutes * 0.2, 2)
 
     def __str__(self) -> str:

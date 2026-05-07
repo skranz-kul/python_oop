@@ -1,25 +1,16 @@
 from __future__ import annotations
 
-try:
-    from ..lib.book_validators import (
-        validate_float_min,
-        validate_int_min,
-        validate_non_empty_string,
-        validate_state,
-        validate_year,
-    )
-except ImportError:
-    from lib.book_validators import (  # type: ignore[no-redef]
-        validate_float_min,
-        validate_int_min,
-        validate_non_empty_string,
-        validate_state,
-        validate_year,
-    )
+from src.lib.book_validators import (
+    validate_float_min,
+    validate_int_min,
+    validate_non_empty_string,
+    validate_state,
+    validate_year,
+)
 
 
 class BookValidationError(ValueError):
-    """Исключение для ошибок валидации модели книги."""
+    """исключение для ошибок валидации модели книги"""
 
 
 class BookState:
@@ -29,7 +20,7 @@ class BookState:
 
 
 class Book:
-    """Базовый класс книги для иерархии ЛР-3."""
+    """базовый класс книги для иерархии лр-3"""
 
     ALLOWED_STATES: tuple[str, ...] = (
         BookState.AVAILABLE,
@@ -171,6 +162,6 @@ class Book:
         self._state = BookState.LOST
 
     def calculate_access_fee(self) -> float:
-        """Общий интерфейс поведения для полиморфизма."""
+        """общий интерфейс поведения для полиморфизма"""
         return round(self._price, 2)
 

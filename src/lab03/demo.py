@@ -1,11 +1,11 @@
-"""Демонстрация ЛР-3: наследование, полиморфизм, коллекция."""
+"""демонстрация лр-3: наследование, полиморфизм, коллекция"""
 
 from __future__ import annotations
 
 
 from src.lab02.collection import Library
-from .base import Book
-from .models import AudioBook, Ebook, PrintedBook
+from src.lab03.base import Book
+from src.lab03.models import AudioBook, Ebook, PrintedBook
 
 
 def _print_collection(label: str, collection: Library) -> None:

@@ -24,6 +24,15 @@ except ImportError:
         Ebook = None
         PrintedBook = None
 
+try:
+    from ..lab04.interfaces import Comparable, Printable
+except ImportError:
+    try:
+        from lab04.interfaces import Comparable, Printable  # type: ignore[no-redef]
+    except ImportError:
+        Comparable = None
+        Printable = None
+
 if TYPE_CHECKING:
     from ..lab03.base import Book as Lab03BookType
 
@@ -152,6 +161,17 @@ class Library:
         if AudioBook is None:
             return Library()
         return self._new_with(b for b in self._items if isinstance(b, AudioBook))
+
+    # лр-4: выборки по интерфейсам
+    def get_printable(self) -> list[Printable]:
+        if Printable is None:
+            return []
+        return [item for item in self._items if isinstance(item, Printable)]
+
+    def get_comparable(self) -> list[Comparable]:
+        if Comparable is None:
+            return []
+        return [item for item in self._items if isinstance(item, Comparable)]
 
 
 __all__ = (
