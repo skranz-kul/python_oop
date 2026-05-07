@@ -38,19 +38,19 @@
 - создаются разные объекты
 - вызывается `to_display_string()` через `Printable`
 
-![Lab04](../../images/lab04/001.jpg)
+![Lab04](../../images/lab04/01.jpg)
 
 сценарий 2 — универсальные функции и isinstance:
 - `print_all(items: list[Printable])`
 - `sort_by_interface(items: list[Comparable])`
 - проверка `isinstance(obj, Printable/Comparable)`
 
-![Lab04](../../images/lab04/002.jpg)
+![Lab04](../../images/lab04/02.jpg)
 
 сценарий 3 — интеграция с коллекцией лр-2:
 - `Library` хранит объекты, реализующие интерфейсы
 - фильтрация по интерфейсам: `get_printable()`, `get_comparable()`
 - полиморфные вызовы без ветвления по конкретному типу
 
-![Lab04](../../images/lab04/003.jpg)
+![Lab04](../../images/lab04/03.jpg)
 
