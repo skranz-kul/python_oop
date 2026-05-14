@@ -130,8 +130,9 @@ def scenario_replace_strategies() -> None:
     filtered = collection.filter_by(max_1200_filter)
     _print_items("фабрика фильтра make_max_price_filter(1200):", BookCollection(filtered.to_list()))
 
-    filtered_builtin = list(filter(max_1200_filter, collection))
+    filtered_builtin = filter(max_1200_filter, collection)
     print("результат встроенного filter(...):")
+    print(filtered_builtin)
     for item in filtered_builtin:
         print(f"  {item}")
     print()

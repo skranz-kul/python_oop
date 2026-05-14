@@ -165,3 +165,11 @@ class Book:
         """общий интерфейс поведения для полиморфизма"""
         return round(self._price, 2)
 
+    def display(self) -> str:
+        """Строка для отображения (структурное соответствие протоколу Displayable)."""
+        return f"{self.title} | {self.author} | {self.year} | {self.inventory_id}"
+
+    def score(self) -> float:
+        """Числовая метрика (структурное соответствие протоколу Scorable)."""
+        return self.calculate_access_fee()
+

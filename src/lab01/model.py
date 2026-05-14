@@ -126,7 +126,14 @@ class Book:
             return NotImplemented
         return self._inventory_id == other._inventory_id
 
-    
+    def display(self) -> str:
+        """Краткая строка для каталога (структурное соответствие протоколу Displayable)."""
+        return f"{self._title} · {self._author} [{self._inventory_id}]"
+
+    def score(self) -> float:
+        """Метрика для ранжирования (структурное соответствие протоколу Scorable)."""
+        return float(round(self._price, 2))
+
     def checkout(self) -> None:
         """Выдать книгу читателю"""
         if self._state != BookState.AVAILABLE:

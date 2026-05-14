@@ -64,6 +64,9 @@ class PrintedBook(Book):
             f"[{self.inventory_id}] fee={self.calculate_access_fee():.2f}₽"
         )
 
+    def display(self) -> str:
+        return f"[Printed] {self.title} · обложка={self.cover_type} · {self.inventory_id}"
+
 
 class Ebook(Book):
     """электронная книга"""
@@ -113,6 +116,9 @@ class Ebook(Book):
             f"Ebook '{self.title}' ({self.file_format}, {self.file_size_mb:.2f}MB) "
             f"[{self.inventory_id}] fee={self.calculate_access_fee():.2f}₽"
         )
+
+    def display(self) -> str:
+        return f"[Ebook] {self.title} · {self.file_format} · {self.inventory_id}"
 
 
 class AudioBook(Book):
@@ -164,4 +170,7 @@ class AudioBook(Book):
             f"duration={self.duration_minutes}min) "
             f"[{self.inventory_id}] fee={self.calculate_access_fee():.2f}₽"
         )
+
+    def display(self) -> str:
+        return f"[Audio] {self.title} · {self.narrator} · {self.inventory_id}"
 
